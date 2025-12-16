@@ -87,6 +87,11 @@ wss.on('close', () => {
 // HTTP API Endpoints
 // ============================================
 
+// Handle favicon requests to prevent 404 errors
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
+});
+
 /**
  * Send QR string to specific kasir
  * POST /send-qr
