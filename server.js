@@ -8,6 +8,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================
+// CORS Middleware
+// ============================================
+const allowedOrigins = [
+    'https://ml.nalju.com',
+    'https://qrs.nalju.com',
+    'http://localhost',
+    'http://localhost:3000'
+];
+
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
+    // Allow credentials
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Allowed headers
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+    // Allowed methods
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    next();
+});
+
+// ============================================
 // Configuration
 // ============================================
 
