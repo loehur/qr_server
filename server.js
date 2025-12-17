@@ -107,6 +107,14 @@ wss.on('connection', (ws, req) => {
         return;
     }
 
+    // Check if kasir_id is already connected (prevent duplicate connections)
+    const existingClient = clients.get(kasirId);
+    if (existingClient && existingClient.readyState === WebSocket.OPEN) {
+        console.log(`Connection rejected: kasir_id "${kasirId}" is already connected`);
+        ws.close(4004, 'kasir_id is already connected');
+        return;
+    }
+
     console.log(`Kasir ${kasirId} connected (authenticated)`);
 
     // Store the client connection
